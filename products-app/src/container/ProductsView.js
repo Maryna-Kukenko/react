@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import fetchProducts from "../api/fetchProducts";
-import {Col, Container, ListGroup, Row} from "react-bootstrap";
+import {Col, ListGroup, Row} from "react-bootstrap";
 import InputValue from "../component/Filter";
 import Categories from "../component/Categories";
-import Products from "../component/Products";
 import {Route, Switch} from "react-router";
 import DefaultView from "../component/DefaultView";
-import Layout from "../hoc";
+import Products from "../component/Products";
 
 class ProductsView extends Component{
   state = {
@@ -78,7 +77,10 @@ class ProductsView extends Component{
             </ListGroup>
           </Col>
           <Col lg={7}>
-            {children}
+            <Switch>
+              <Route exact path='/' component={DefaultView} />
+              <Route exact path='/:name' component={Products}/>
+          </Switch>
           </Col>
         </Row>
       </>

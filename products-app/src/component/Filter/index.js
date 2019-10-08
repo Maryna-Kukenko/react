@@ -4,13 +4,14 @@ import {Row, Col, InputGroup, FormControl, Button } from "react-bootstrap";
 const InputValue = (props) => {
   return (
     <Row>
-      <Col lg={{span: 4, offset: 4}}>
+      <Col lg={{span: 7, offset: 4}}>
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Search the product"
             aria-label="Search the product"
             aria-describedby="basic-addon2"
             onChange={props.findProduct}
+            value={props.value}
           />
           <InputGroup.Append>
             <Button

@@ -1,13 +1,13 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ListGroup } from "react-bootstrap";
 
 const Categories = (props) => (
-  <NavLink to={`/${props.name}`}>
+  <Link to={`/${props.name}`}>
     <ListGroup.Item as='li'>
       {props.name}
     </ListGroup.Item>
-  </NavLink>
+  </Link>
 )
 
 export default Categories

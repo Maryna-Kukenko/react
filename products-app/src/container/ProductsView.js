@@ -4,13 +4,13 @@ import {Col, ListGroup, Row} from "react-bootstrap";
 import InputValue from "../component/Filter";
 import Categories from "../component/Categories";
 import {Route, Switch} from "react-router";
-import DefaultView from "../component/DefaultView";
-import Products from "../component/Products";
+import ProductsList from "../component/ProductsList";
 
 class ProductsView extends Component{
   state = {
     productList: [],
     categoryList: [],
+    filteredList: [],
     filterValue: ''
   }
 
@@ -49,20 +49,22 @@ class ProductsView extends Component{
 
   showFilteredProduct = () => {
     let filterdArr = this.state.productList.filter(item => {
-      return item.name.includes(this.state.filterValue)
+      return item.name.toLowerCase().includes(this.state.filterValue.toLowerCase())
     })
-    this.setState({
-      productList: filterdArr
+    return this.setState({
+      filteredList: filterdArr,
+      filterValue: ''
     })
   }
+
   render() {
-    const categoryList = this.state.categoryList
-    const { children } = this.props;
+    const {productList, categoryList, filteredList, filterValue} = this.state
     return (
       <>
         <InputValue
           findProduct={this.findProduct}
           showProduct={this.showFilteredProduct}
+          value={filterValue}
         />
         <Row>
           <Col lg={{span: 3, offset: 1}}>
@@ -71,15 +73,22 @@ class ProductsView extends Component{
                 return <Categories
                   name = {item}
                   key = {index}
-                  {...this.props}
                 />
               })}
             </ListGroup>
           </Col>
           <Col lg={7}>
             <Switch>
-              <Route exact path='/' component={DefaultView} />
-              <Route exact path='/:name' component={Products}/>
+              <Route exact path='/' render={ props =>
+                <ProductsList list = {productList}
+                              filteredList = {filteredList}
+                              {...props}/>
+              }/>
+              <Route exact path='/:name' render={ props =>
+                <ProductsList list = {productList}
+                              filteredList = {filteredList}
+                              {...props} />
+              }/>
           </Switch>
           </Col>
         </Row>

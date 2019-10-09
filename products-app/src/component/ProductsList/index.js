@@ -12,16 +12,16 @@ class ProductsList extends Component {
             <ProductsListItem
               title={item.name}
               photo={item.img}
-              price ={item.price}
-              key={index}/>)):
+              price={item.price}
+              key={index}/>)) :
           list.map((item, index) => (
-            this.props.match.params.name === item['bsr_category']?
+            this.props.match.params.name === item['bsr_category'] ?
               <ProductsListItem
                 title={item.name}
                 photo={item.img}
-                price ={item.price}
+                price={item.price}
                 key={index}/>
-                :null
+              : null
           ))
         }
       </ListGroup>

@@ -4,7 +4,6 @@ import ProductsListItem from "../ProductListItem";
 
 class ProductsList extends Component {
   render() {
-    // console.log(this.props.location.pathname)
     const list = this.props.list
     return (
       <ListGroup>

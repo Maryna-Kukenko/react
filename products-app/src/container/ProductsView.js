@@ -3,7 +3,7 @@ import fetchProducts from "../api/fetchProducts";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import InputValue from "../component/Filter";
 import Categories from "../component/Categories";
-import {Route, Switch} from "react-router";
+import { Route, Switch } from "react-router";
 import { withRouter } from "react-router";
 import ProductsList from "../component/ProductsList";
 
@@ -47,20 +47,27 @@ class ProductsView extends Component{
     })
   };
 
-  showFilteredProducts =() => {
-    let filterdArr = this.state.productList.filter(item => {
-      return item.name.toLowerCase().includes(this.state.filterValue.toLowerCase())
-    });
-    console.log('FILTERED FUNCTION');
-    console.log(filterdArr);
+  showFilteredProducts = () => {
+    this.state.category === ''?
+      this.selectProducts(this.state.productList):
+      this.selectCategory()
+  };
+
+  selectProducts = (list) => {
+    let findCategory = list.filter(item =>  item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
     return this.setState({
-      filteredList: filterdArr,
-      filterValue: ''
-    })
+        filteredList: findCategory,
+        filterValue: ''
+      })
+  };
+
+  selectCategory = () => {
+    let filteredCategory = this.state.productList.filter(item => item['bsr_category'].toLowerCase() === this.state.category.toLowerCase());
+    this.selectProducts(filteredCategory)
   };
 
   selectedCategory = category => {
-    this.setState({category})
+    this.setState({category});
     this.showCategoryProducts(category)
   };
 
@@ -68,17 +75,18 @@ class ProductsView extends Component{
     let categoryProductsArr = this.state.productList.filter(item => {
       return item['bsr_category'] === category
     });
-    console.log('FILTERED FUNCTION');
+    console.log('FILTERED FUNCTION Category products');
     console.log(categoryProductsArr);
     return this.setState({
       filteredList: categoryProductsArr,
       filterValue: ''
     })
-  }
+  };
 
   render() {
     const { productList, categoryList, filteredList, filterValue, category} = this.state;
     const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
+    // console.log(filteredList);
     return (
       <>
         <InputValue

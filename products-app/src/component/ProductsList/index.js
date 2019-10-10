@@ -4,26 +4,17 @@ import ProductsListItem from "../ProductListItem";
 
 class ProductsList extends Component {
   render() {
+    // console.log(this.props.location.pathname)
     const list = this.props.list
     return (
       <ListGroup>
-        {this.props.match.params.name === undefined?
-          list.map((item, index) => (
-            <ProductsListItem
-              title={item.name}
-              photo={item.img}
-              price={item.price}
-              key={index}/>)) :
-          list.map((item, index) => (
-            this.props.match.params.name === item['bsr_category'] ?
+        {list.map((item, index) => (
               <ProductsListItem
                 title={item.name}
                 photo={item.img}
                 price={item.price}
                 key={index}/>
-              : null
-          ))
-        }
+          ))}
       </ListGroup>
     )
   }

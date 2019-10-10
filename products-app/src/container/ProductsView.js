@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import fetchProducts from "../api/fetchProducts";
-import {Col, ListGroup, Row} from "react-bootstrap";
+import { Col, ListGroup, Row } from "react-bootstrap";
 import InputValue from "../component/Filter";
 import Categories from "../component/Categories";
 import {Route, Switch} from "react-router";
+import { withRouter } from "react-router";
 import ProductsList from "../component/ProductsList";
-import FilteredList from "../component/FilteredList";
 
 class ProductsView extends Component{
   state = {
@@ -41,16 +41,18 @@ class ProductsView extends Component{
     })
   };
 
-  findProduct = e => {
+  handleInputValue = e => {
     return this.setState({
       filterValue: e.target.value
     })
   };
 
-  showFilteredProduct = () => {
+  showFilteredProducts =() => {
     let filterdArr = this.state.productList.filter(item => {
       return item.name.toLowerCase().includes(this.state.filterValue.toLowerCase())
     });
+    console.log('FILTERED FUNCTION');
+    console.log(filterdArr);
     return this.setState({
       filteredList: filterdArr,
       filterValue: ''
@@ -58,17 +60,30 @@ class ProductsView extends Component{
   };
 
   selectedCategory = category => {
-    return this.setState({category})
-};
+    this.setState({category})
+    this.showCategoryProducts(category)
+  };
+
+  showCategoryProducts = (category) => {
+    let categoryProductsArr = this.state.productList.filter(item => {
+      return item['bsr_category'] === category
+    });
+    console.log('FILTERED FUNCTION');
+    console.log(categoryProductsArr);
+    return this.setState({
+      filteredList: categoryProductsArr,
+      filterValue: ''
+    })
+  }
 
   render() {
-    const {productList, categoryList, filterValue, filteredList,  category} = this.state;
-    const {findProduct, showFilteredProduct,selectedCategory} = this;
+    const { productList, categoryList, filteredList, filterValue, category} = this.state;
+    const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
     return (
       <>
         <InputValue
-          findProduct={findProduct}
-          showProduct={showFilteredProduct}
+          findProduct={handleInputValue}
+          showProducts={showFilteredProducts}
           value={filterValue}
           category={category}
         />
@@ -79,7 +94,8 @@ class ProductsView extends Component{
                 return <Categories
                   name = {item}
                   key = {index}
-                  selectedCategory = {selectedCategory}
+                  selectedCategory={selectedCategory}
+                  showProducts={showCategoryProducts}
                   category = {category}
                 />
               })}
@@ -87,21 +103,21 @@ class ProductsView extends Component{
           </Col>
           <Col lg={7}>
             <Switch>
-              <Route exact path='/' render={ props => {
-                return <ProductsList list = {productList} filteredList ={filteredList} {...props}/>
-              }}/>
-              <Route exact path='/:name/:value' render={ props => {
-                return <FilteredList list = {filteredList} {...props} />
-              }}/>
-              <Route exact path='/:name' render={ props => {
-                return <ProductsList list = {productList} filteredList ={filteredList} {...props} />
-              }}/>
-          </Switch>
+              <Route path='/:name/:value' render={props => {
+                return <ProductsList list={filteredList} {...props} />
+              }} />
+              <Route path='/:name' render={props => {
+                return <ProductsList list={filteredList} {...props} />
+              }} />
+              <Route path='/' render={props => {
+                return <ProductsList list={productList}{...props} />
+              }} />
+            </Switch>
           </Col>
         </Row>
       </>
-    )
+    );
   }
 }
 
-export default ProductsView
+export default withRouter(ProductsView)

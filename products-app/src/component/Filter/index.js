@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Row, Col, InputGroup, FormControl, Button } from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {withRouter} from "react-router";
 
 class InputValue extends Component {
   render() {
-    const {findProduct, value, category, showProduct } = this.props
+    const {findProduct, showProducts, value, category } = this.props;
     return (
         <Row>
           <Col lg={{span: 7, offset: 4}}>
@@ -18,20 +18,19 @@ class InputValue extends Component {
                   category={category}
               />
               <InputGroup.Append>
-                {/*<Link to={`/${props.category}/${props.value}`}><Button*/}
-                <Link to={`/${category}/${value}`}><Button
-                    variant="outline-secondary"
-                    onClick={showProduct}
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    this.props.history.push(this.props.location.pathname + value);
+                    showProducts()
+                  }}
                 >Find</Button>
-                </Link>
               </InputGroup.Append>
             </InputGroup>
           </Col>
         </Row>
     )
   }
-
-
 }
 
-export default InputValue
+export default withRouter(InputValue)

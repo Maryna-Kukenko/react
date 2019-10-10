@@ -18,9 +18,7 @@ class ProductsView extends Component{
 
   componentDidMount() {
     fetchProducts().then(res => {
-      this.setState({
-        productList: res.products
-      });
+      this.setState({productList: res.products});
       let categoryArr = [];
       res.products.map(item => {
         categoryArr.push(item['bsr_category']);
@@ -41,11 +39,7 @@ class ProductsView extends Component{
     })
   };
 
-  handleInputValue = e => {
-    return this.setState({
-      filterValue: e.target.value
-    })
-  };
+  handleInputValue = e => this.setState({filterValue: e.target.value});
 
   showFilteredProducts = () => {
     this.state.category === ''?
@@ -53,8 +47,8 @@ class ProductsView extends Component{
       this.selectCategory()
   };
 
-  selectProducts = (list) => {
-    let findCategory = list.filter(item =>  item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
+  selectProducts = list => {
+    let findCategory = list.filter(item => item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
     return this.setState({
         filteredList: findCategory,
         filterValue: ''
@@ -71,12 +65,8 @@ class ProductsView extends Component{
     this.showCategoryProducts(category)
   };
 
-  showCategoryProducts = (category) => {
-    let categoryProductsArr = this.state.productList.filter(item => {
-      return item['bsr_category'] === category
-    });
-    console.log('FILTERED FUNCTION Category products');
-    console.log(categoryProductsArr);
+  showCategoryProducts = category => {
+    let categoryProductsArr = this.state.productList.filter(item =>  item['bsr_category'] === category);
     return this.setState({
       filteredList: categoryProductsArr,
       filterValue: ''
@@ -86,7 +76,6 @@ class ProductsView extends Component{
   render() {
     const { productList, categoryList, filteredList, filterValue, category} = this.state;
     const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
-    // console.log(filteredList);
     return (
       <>
         <InputValue
@@ -100,11 +89,11 @@ class ProductsView extends Component{
             <ListGroup as='ul'>
               {categoryList.map( (item, index) => {
                 return <Categories
-                  name = {item}
-                  key = {index}
+                  name={item}
+                  key={index}
                   selectedCategory={selectedCategory}
                   showProducts={showCategoryProducts}
-                  category = {category}
+                  category={category}
                 />
               })}
             </ListGroup>

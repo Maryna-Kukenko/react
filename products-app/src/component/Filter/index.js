@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import {Row, Col, InputGroup, FormControl, Button } from "react-bootstrap";
-import {withRouter} from "react-router";
+import { Row, Col, InputGroup, FormControl, Button } from "react-bootstrap";
+import { withRouter } from "react-router";
 
 class InputValue extends Component {
   render() {
-    const {findProduct, showProducts, value, category } = this.props;
+    const {findProduct, showProducts, value, category, location, history } = this.props;
     return (
         <Row>
           <Col lg={{span: 7, offset: 4}}>
@@ -21,7 +21,9 @@ class InputValue extends Component {
                 <Button
                   variant="outline-secondary"
                   onClick={() => {
-                    this.props.history.push(this.props.location.pathname + value);
+                    location.pathname === '/'?
+                    history.push(location.pathname + value):
+                      history.push(`${location.pathname}/` + value);
                     showProducts()
                   }}
                 >Find</Button>

@@ -6,6 +6,7 @@ import Categories from "../component/Categories";
 import { Route, Switch } from "react-router";
 import { withRouter } from "react-router";
 import ProductsList from "../component/ProductsList";
+import  {getData} from "../ducks/Products/actions";
 
 class ProductsView extends Component{
   state = {
@@ -17,6 +18,7 @@ class ProductsView extends Component{
   };
 
   componentDidMount() {
+
     fetchProducts().then(res => {
       this.setState({productList: res.products});
       let categoryArr = [];

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import fetchProducts from "../api/fetchProducts";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import InputValue from "../component/Filter";
 import Categories from "../component/Categories";
@@ -11,8 +10,6 @@ import  { addToStore } from "../ducks/Products/actions";
 
 class ProductsView extends Component{
   state = {
-    productList: [],
-    categoryList: [],
     filteredList: [],
     filterValue: '',
     category: ''
@@ -20,47 +17,27 @@ class ProductsView extends Component{
 
   componentDidMount() {
     this.props.addElementToStore();
-    fetchProducts().then(res => {
-      this.setState({productList: res.products});
-      let categoryArr = [];
-      res.products.map(item => {
-        categoryArr.push(item['bsr_category']);
-        return this.selectUniqueProducts(categoryArr)
-      })
-    })
   }
-
-  selectUniqueProducts = data => {
-    let unique = [];
-    for (let item of data) {
-      if (!unique.includes(item)) {
-        unique.push(item)
-      }
-    }
-    return this.setState({
-      categoryList: unique
-    })
-  };
 
   handleInputValue = e => this.setState({filterValue: e.target.value});
 
   showFilteredProducts = () => {
     this.state.category === ''?
-      this.selectProducts(this.state.productList):
-      this.selectCategory()
+      this.filterProducts(this.props.products):
+      this.filterCategory()
   };
 
-  selectProducts = list => {
+  filterCategory = () => {
+    let filteredCategory = this.props.products.filter(item => item['bsr_category'].toLowerCase() === this.state.category.toLowerCase());
+    this.filterProducts(filteredCategory)
+  };
+
+  filterProducts = list => {
     let findCategory = list.filter(item => item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
     return this.setState({
-        filteredList: findCategory,
-        filterValue: ''
-      })
-  };
-
-  selectCategory = () => {
-    let filteredCategory = this.state.productList.filter(item => item['bsr_category'].toLowerCase() === this.state.category.toLowerCase());
-    this.selectProducts(filteredCategory)
+      filteredList: findCategory,
+      filterValue: ''
+    })
   };
 
   selectedCategory = category => {
@@ -69,7 +46,7 @@ class ProductsView extends Component{
   };
 
   showCategoryProducts = category => {
-    let categoryProductsArr = this.state.productList.filter(item =>  item['bsr_category'] === category);
+    let categoryProductsArr = this.props.products.filter(item =>  item['bsr_category'] === category);
     return this.setState({
       filteredList: categoryProductsArr,
       filterValue: ''
@@ -77,9 +54,7 @@ class ProductsView extends Component{
   };
 
   render() {
-    console.log(this.props.products);
-    console.log(this.props.categories);
-    const { productList, categoryList, filteredList, filterValue, category} = this.state;
+    const { filteredList, filterValue, category} = this.state;
     const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
     return (
       <>
@@ -92,7 +67,7 @@ class ProductsView extends Component{
         <Row>
           <Col lg={{span: 3, offset: 1}}>
             <ListGroup as='ul'>
-              {categoryList.map( (item, index) => {
+              {this.props.categories.map( (item, index) => {
                 return <Categories
                   name={item}
                   key={index}
@@ -112,7 +87,7 @@ class ProductsView extends Component{
                 return <ProductsList list={filteredList} {...props} />
               }} />
               <Route path='/' render={props => {
-                return <ProductsList list={productList}{...props} />
+                return <ProductsList  list = {this.props.products} {...props}/>
               }} />
             </Switch>
           </Col>

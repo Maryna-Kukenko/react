@@ -1,6 +1,11 @@
 import * as Types from './actionTypes'
 
-const reducers = (state = {}, action) => {
+const store = {
+  products: [],
+  categories: []
+}
+
+const reducers = (state = store, action) => {
   switch (action.type) {
     case Types.GET_PRODUCTS:
       return {

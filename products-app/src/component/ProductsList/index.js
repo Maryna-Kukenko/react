@@ -4,19 +4,21 @@ import ProductsListItem from "../ProductListItem";
 
 class ProductsList extends Component {
   render() {
-    const list = this.props.list
     return (
       <ListGroup>
-        {list.map((item, index) => (
+        {
+          this.props.list.map((item, index) => (
               <ProductsListItem
                 title={item.name}
                 photo={item.img}
                 price={item.price}
                 key={index}/>
-          ))}
+          ))
+        }
       </ListGroup>
     )
   }
 }
 
-export default ProductsList
+
+export default ProductsList;

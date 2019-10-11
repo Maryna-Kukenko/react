@@ -77,6 +77,8 @@ class ProductsView extends Component{
   };
 
   render() {
+    console.log(this.props.products);
+    console.log(this.props.categories);
     const { productList, categoryList, filteredList, filterValue, category} = this.state;
     const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
     return (
@@ -120,7 +122,12 @@ class ProductsView extends Component{
   }
 }
 
-const mapStateToProps = (state) =>({});
+
+const mapStateToProps = (state) =>({
+  products: state.reducers.products,
+  categories: state.reducers.categories
+});
+
 const mapDispatchToProps = dispatch => ({
   addElementToStore: ()=>dispatch(addToStore())
 });

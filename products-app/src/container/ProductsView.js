@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import fetchProducts from "../api/fetchProducts";
 import { Col, ListGroup, Row } from "react-bootstrap";
 import InputValue from "../component/Filter";
@@ -6,7 +7,7 @@ import Categories from "../component/Categories";
 import { Route, Switch } from "react-router";
 import { withRouter } from "react-router";
 import ProductsList from "../component/ProductsList";
-import  {getData} from "../ducks/Products/actions";
+import  { addToStore } from "../ducks/Products/actions";
 
 class ProductsView extends Component{
   state = {
@@ -18,7 +19,7 @@ class ProductsView extends Component{
   };
 
   componentDidMount() {
-
+    this.props.addElementToStore();
     fetchProducts().then(res => {
       this.setState({productList: res.products});
       let categoryArr = [];
@@ -119,4 +120,12 @@ class ProductsView extends Component{
   }
 }
 
-export default withRouter(ProductsView)
+const mapStateToProps = (state) =>({});
+const mapDispatchToProps = dispatch => ({
+  addElementToStore: ()=>dispatch(addToStore())
+});
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductsView))

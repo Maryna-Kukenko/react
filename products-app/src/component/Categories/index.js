@@ -1,6 +1,6 @@
 import React from 'react'
-import { ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { ListGroup } from "react-bootstrap";
 
 const Categories = props => (
   <Link to={`/${props.name}`}>

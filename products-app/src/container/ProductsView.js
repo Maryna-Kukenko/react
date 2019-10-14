@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux'
-import { Col, ListGroup, Row } from "react-bootstrap";
-import InputValue from "../component/Filter";
-import Categories from "../component/Categories";
-import { Route, Switch } from "react-router";
-import { withRouter } from "react-router";
-import ProductsList from "../component/ProductsList";
-import  { addToStore } from "../ducks/Products/actions";
+import { Route, Switch, withRouter } from 'react-router';
+import { connect } from 'react-redux'
+import { Col, ListGroup, Row } from 'react-bootstrap';
+
+import  { addToStore } from '../redux/Products/actions';
+import InputValue from '../component/Filter';
+import Categories from '../component/Categories';
+import ProductsList from '../component/ProductsList';
 
 class ProductsView extends Component{
   state = {
@@ -16,26 +16,31 @@ class ProductsView extends Component{
   };
 
   componentDidMount() {
+    //fetch data using saga
     this.props.addElementToStore();
   }
 
+  //save search value from input
   handleInputValue = e => this.setState({filterValue: e.target.value});
 
+  // separate search from all products and category products
   showFilteredProducts = () => {
     this.state.category === ''?
       this.filterProducts(this.props.products):
       this.filterCategory()
   };
 
+  //search products via name in current category
   filterCategory = () => {
     let filteredCategory = this.props.products.filter(item => item['bsr_category'].toLowerCase() === this.state.category.toLowerCase());
     this.filterProducts(filteredCategory)
   };
 
+  //search products via name
   filterProducts = list => {
-    let findCategory = list.filter(item => item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
+    let findProducts = list.filter(item => item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
     return this.setState({
-      filteredList: findCategory,
+      filteredList: findProducts,
       filterValue: ''
     })
   };
@@ -45,8 +50,9 @@ class ProductsView extends Component{
     this.showCategoryProducts(category)
   };
 
+  //filter by category
   showCategoryProducts = category => {
-    let categoryProductsArr = this.props.products.filter(item =>  item['bsr_category'] === category);
+    let categoryProductsArr = this.props.products.filter(item => item['bsr_category'] === category);
     return this.setState({
       filteredList: categoryProductsArr,
       filterValue: ''
@@ -58,16 +64,20 @@ class ProductsView extends Component{
     const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
     return (
       <>
-        <InputValue
-          findProduct={handleInputValue}
-          showProducts={showFilteredProducts}
-          value={filterValue}
-          category={category}
-        />
+        <Row>
+          <Col lg={{span: 7, offset: 4}}>
+            <InputValue
+              findProduct={handleInputValue}
+              showProducts={showFilteredProducts}
+              value={filterValue}
+              category={category}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col lg={{span: 3, offset: 1}}>
             <ListGroup as='ul'>
-              {this.props.categories.map( (item, index) => {
+              {this.props.categories.map((item, index) => {
                 return <Categories
                   name={item}
                   key={index}
@@ -97,14 +107,13 @@ class ProductsView extends Component{
   }
 }
 
-
-const mapStateToProps = (state) =>({
+const mapStateToProps = state => ({
   products: state.reducers.products,
   categories: state.reducers.categories
 });
 
 const mapDispatchToProps = dispatch => ({
-  addElementToStore: ()=>dispatch(addToStore())
+  addElementToStore: () => dispatch(addToStore())
 });
 
 export default withRouter(connect(

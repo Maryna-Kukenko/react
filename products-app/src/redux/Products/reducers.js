@@ -3,7 +3,7 @@ import * as Types from './actionTypes'
 const store = {
   products: [],
   categories: []
-}
+};
 
 const reducers = (state = store, action) => {
   switch (action.type) {

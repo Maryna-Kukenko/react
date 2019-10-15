@@ -1,74 +1,53 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router';
 import { connect } from 'react-redux'
-import { Col, ListGroup, Row } from 'react-bootstrap';
+import {Col, ListGroup, ListGroupItem, Row} from 'react-bootstrap';
 
 import  { addToStore } from '../ducks/Products/products';
-import InputValue from '../component/Filter';
+import InputValue from '../component/Search';
 import Categories from '../component/Categories';
 import ProductsList from '../component/ProductsList';
+import { Link } from "react-router-dom";
 
 class ProductsView extends Component{
   state = {
-    filteredList: [],
-    filterValue: '',
+    filterValue:'',
     category: ''
   };
 
   componentDidMount() {
+    const { location: { pathname, search } } = this.props;
+    const {filterValue, category} = this.state;
+
     //fetch data using saga
     this.props.addElementToStore();
+
+    if ((pathname || search) && !filterValue && !category) {
+      let word = search ? search.split('?search=')[1] : '';
+      let category = pathname ? pathname.split('/')[1] : '';
+      this.setState({
+        filterValue: word,
+        category: category
+      })
+    }
   }
 
   //save search value from input
   handleInputValue = e => this.setState({filterValue: e.target.value});
 
-  // separate search from all products and category products
-  showFilteredProducts = () => {
-    this.state.category === ''?
-      this.filterProducts(this.props.products):
-      this.filterCategory()
-  };
-
-  //search products via name in current category
-  filterCategory = () => {
-    let filteredCategory = this.props.products.filter(item => item['bsr_category'].toLowerCase() === this.state.category.toLowerCase());
-    this.filterProducts(filteredCategory)
-  };
-
-  //search products via name
-  filterProducts = list => {
-    let findProducts = list.filter(item => item.name.toLowerCase().includes(this.state.filterValue.toLowerCase()));
-    return this.setState({
-      filteredList: findProducts,
-      filterValue: ''
-    })
-  };
-
   selectedCategory = category => {
     this.setState({category});
-    this.showCategoryProducts(category)
-  };
-
-  //filter by category
-  showCategoryProducts = category => {
-    let categoryProductsArr = this.props.products.filter(item => item['bsr_category'] === category);
-    return this.setState({
-      filteredList: categoryProductsArr,
-      filterValue: ''
-    })
   };
 
   render() {
-    const { filteredList, filterValue, category} = this.state;
-    const { handleInputValue, showFilteredProducts, selectedCategory, showCategoryProducts } = this;
+    const { filterValue, category} = this.state;
+    const { handleInputValue, selectedCategory } = this;
     return (
       <>
         <Row>
           <Col lg={{span: 7, offset: 4}}>
             <InputValue
               findProduct={handleInputValue}
-              showProducts={showFilteredProducts}
               value={filterValue}
               category={category}
             />
@@ -77,12 +56,16 @@ class ProductsView extends Component{
         <Row>
           <Col lg={{span: 3, offset: 1}}>
             <ListGroup as='ul'>
+              <Link to='/'>
+                <ListGroupItem onClick={() => selectedCategory('')}>
+                  All Categories
+                </ListGroupItem>
+              </Link>
               {this.props.categories.map((item, index) => {
                 return <Categories
                   name={item}
                   key={index}
                   selectedCategory={selectedCategory}
-                  showProducts={showCategoryProducts}
                   category={category}
                 />
               })}
@@ -90,15 +73,18 @@ class ProductsView extends Component{
           </Col>
           <Col lg={7}>
             <Switch>
-              <Route path='/:name/:value' render={props => {
-                return <ProductsList list={filteredList} {...props} />
-              }} />
-              <Route path='/:name' render={props => {
-                return <ProductsList list={filteredList} {...props} />
-              }} />
-              <Route path='/' render={props => {
-                return <ProductsList  list = {this.props.products} {...props}/>
-              }} />
+              <Route path='/:name' component={props =>
+                <ProductsList
+                  searchValue={filterValue}
+                  searchCategory={category}
+                  list={this.props.products} {...props} />
+              }/>
+              <Route exact path='/' component={props =>
+                <ProductsList
+                  searchValue={filterValue}
+                  searchCategory={category}
+                  list = {this.props.products} {...props}/>
+              }/>
             </Switch>
           </Col>
         </Row>

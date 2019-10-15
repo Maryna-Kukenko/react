@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import {Link} from "react-router-dom";
 
 class InputValue extends Component {
   render() {
@@ -16,6 +17,7 @@ class InputValue extends Component {
           category={category}
         />
         <InputGroup.Append>
+          {/*<Link to={location.pathname}>*/}
           <Button
             variant='outline-secondary'
             onClick={() => {
@@ -25,6 +27,7 @@ class InputValue extends Component {
               showProducts()
             }}
           >Find</Button>
+          {/*</Link>*/}
         </InputGroup.Append>
       </InputGroup>
     )

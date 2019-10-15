@@ -7,6 +7,7 @@ const Categories = props => (
     <ListGroup.Item as='li' onClick={() => props.selectedCategory(props.name)}>
     {props.name}
   </ListGroup.Item>
+
   </Link>
 );
 

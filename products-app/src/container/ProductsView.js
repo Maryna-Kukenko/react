@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from 'react-router';
 import { connect } from 'react-redux'
 import { Col, ListGroup, Row } from 'react-bootstrap';
 
-import  { addToStore } from '../redux/Products/actions';
+import  { addToStore } from '../ducks/Products/products';
 import InputValue from '../component/Filter';
 import Categories from '../component/Categories';
 import ProductsList from '../component/ProductsList';

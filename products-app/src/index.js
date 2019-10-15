@@ -5,7 +5,7 @@ import App from './App';
 import { Router, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
-import store from "./redux";
+import store from "./ducks";
 
 const history = createBrowserHistory();
 

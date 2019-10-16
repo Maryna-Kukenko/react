@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components'
-
 import {CardImg, ListGroupItem} from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import CardBody from 'react-bootstrap/Card';

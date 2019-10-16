@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from "@redux-saga/core/effects";
-import axios from "axios";
+import { call, put, takeEvery } from '@redux-saga/core/effects';
+import axios from 'axios';
 
 //actionTypes
 export const GET_DATA = 'GET_DATA';
@@ -67,4 +67,3 @@ export function addCategory(data) {
 export function addSearchValue(data) {
   return({type: GET_SEARCH_VALUE, payload: data})
 }
-

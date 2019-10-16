@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from "react-router-dom";
-import { ListGroup } from "react-bootstrap";
-import { withRouter } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import { ListGroup } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 
 const Categories = props => (
   <Link to={`${props.name}`}>

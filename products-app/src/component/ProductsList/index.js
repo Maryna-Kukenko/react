@@ -3,27 +3,16 @@ import { ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 const ProductsList = props =>  {
-    const { searchValue, selectCategory, products, createList } = props;
-    const { location: { pathname, search }} = props;
-    const filteredProducts = products.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()));
-    const filteredCategoryProducts = filteredProducts.filter(item => item['bsr_category'].toLowerCase() === selectCategory.toLowerCase());
+    const { createList } = props;
     return (
     <ListGroup>
-      {
-        pathname === '/' && !search? createList(products)
-          :pathname === '/' && search? createList(filteredProducts)
-          :createList(filteredCategoryProducts)
-      }
+      { createList(props.products) }
     </ListGroup>
   )
-}
-
+};
 
 const mapStateToProps = state => ({
   products: state.reducers.products,
-  categories: state.reducers.categories,
-  selectCategory: state.reducers.category,
-  searchValue: state.reducers.search
 });
 
 const mapDispatchToProps = dispatch => ({});

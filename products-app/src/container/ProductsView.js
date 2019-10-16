@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router';
 import { connect } from 'react-redux'
 import {Col, ListGroup, ListGroupItem, Row} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-import  { addToStore } from '../ducks/Products/products';
+import {addCategory, addSearchValue, addToStore} from '../ducks/products';
 import InputValue from '../component/Search';
 import Categories from '../component/Categories';
 import ProductsList from '../component/ProductsList';
-import { Link } from "react-router-dom";
 
 class ProductsView extends Component{
   state = {
@@ -16,11 +16,23 @@ class ProductsView extends Component{
   };
 
   componentDidMount() {
-    const { location: { pathname, search } } = this.props;
-    const {filterValue, category} = this.state;
-
     //fetch data using saga
     this.props.addElementToStore();
+
+    //save data after refreshing
+    this.checkRefreshedData();
+  }
+
+  //save search value from input
+  handleInputValue = e => this.setState({filterValue: e.target.value});
+
+  selectedCategory = category => {
+    this.setState({category});
+  };
+
+  checkRefreshedData = () => {
+    const { location: { pathname, search } } = this.props;
+    const {filterValue, category} = this.state;
 
     if ((pathname || search) && !filterValue && !category) {
       let word = search ? search.split('?search=')[1] : '';
@@ -32,12 +44,6 @@ class ProductsView extends Component{
     }
   }
 
-  //save search value from input
-  handleInputValue = e => this.setState({filterValue: e.target.value});
-
-  selectedCategory = category => {
-    this.setState({category});
-  };
 
   render() {
     const { filterValue, category} = this.state;
@@ -61,14 +67,14 @@ class ProductsView extends Component{
                   All Categories
                 </ListGroupItem>
               </Link>
-              {this.props.categories.map((item, index) => {
-                return <Categories
+              {this.props.categories.map((item, index) => (
+                <Categories
                   name={item}
                   key={index}
                   selectedCategory={selectedCategory}
                   category={category}
                 />
-              })}
+              ))}
             </ListGroup>
           </Col>
           <Col lg={7}>
@@ -99,7 +105,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addElementToStore: () => dispatch(addToStore())
+  addElementToStore: () => dispatch(addToStore()),
+  addCategoryToStore: () => dispatch(addCategory()),
+  addSearchValueToStore: () => dispatch(addSearchValue())
 });
 
 export default withRouter(connect(

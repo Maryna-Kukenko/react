@@ -5,10 +5,14 @@ import axios from "axios";
 export const GET_DATA = 'GET_DATA';
 export const GET_PRODUCTS = 'GET_PRODUCTS';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const GET_SELECT_CATEGORY = 'GET_SELECT_CATEGORY';
+export const GET_SEARCH_VALUE = 'GET_SEARCH_VALUE';
 
 const store = {
   products: [],
-  categories: []
+  categories: [],
+  category: '',
+  search: ''
 };
 
 //Reducer
@@ -23,6 +27,16 @@ export default function reducer (state = store, action){
       return {
         ...state,
         categories: action.payload
+      };
+    case GET_SELECT_CATEGORY:
+      return {
+        ...state,
+        category: action.payload
+      };
+    case GET_SEARCH_VALUE:
+      return {
+        ...state,
+        search: action.payload
       };
     default: {
       return state
@@ -45,3 +59,12 @@ export function* getData() {
 export function addToStore () {
   return({type: GET_DATA})
 }
+
+export function addCategory(data) {
+  return({type: GET_SELECT_CATEGORY, payload: data})
+}
+
+export function addSearchValue(data) {
+  return({type: GET_SEARCH_VALUE, payload: data})
+}
+

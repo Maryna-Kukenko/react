@@ -1,40 +1,34 @@
 import React from 'react'
 import { ListGroup } from 'react-bootstrap';
-import ProductsListItem from '../ProductListItem';
+import { connect } from 'react-redux';
 
-const ProductsList = props => {
-  const { searchValue, searchCategory, list } = props;
-  const { location: { pathname, search } } = props;
-  const filteredProducts = list.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()));
-  const filteredCategoryProducts = filteredProducts.filter(item => item['bsr_category'].toLowerCase() === searchCategory.toLowerCase());
-  console.log(props)
-  return (
+const ProductsList = props =>  {
+    const { searchValue, selectCategory, products, createList } = props;
+    const { location: { pathname, search }} = props;
+    const filteredProducts = products.filter(item => item.name.toLowerCase().includes(searchValue.toLowerCase()));
+    const filteredCategoryProducts = filteredProducts.filter(item => item['bsr_category'].toLowerCase() === selectCategory.toLowerCase());
+    return (
     <ListGroup>
-      {pathname == '/' && !search?
-        list.map((item, index) => (
-          <ProductsListItem
-          title={item.name}
-          photo={item.img}
-          price={item.price}
-          key={index}/>
-        )):pathname == '/' && search?
-          filteredProducts.map((item, index) => (
-            <ProductsListItem
-              title={item.name}
-              photo={item.img}
-              price={item.price}
-              key={index}/>
-          )):
-          filteredCategoryProducts.map((item, index) => (
-            <ProductsListItem
-              title={item.name}
-              photo={item.img}
-              price={item.price}
-              key={index}/>
-          ))
+      {
+        pathname === '/' && !search? createList(products)
+          :pathname === '/' && search? createList(filteredProducts)
+          :createList(filteredCategoryProducts)
       }
     </ListGroup>
   )
-};
+}
 
-export default ProductsList;
+
+const mapStateToProps = state => ({
+  products: state.reducers.products,
+  categories: state.reducers.categories,
+  selectCategory: state.reducers.category,
+  searchValue: state.reducers.search
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductsList);

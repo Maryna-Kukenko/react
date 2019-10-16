@@ -8,59 +8,64 @@ import {addCategory, addSearchValue, addToStore} from '../ducks/products';
 import InputValue from '../component/Search';
 import Categories from '../component/Categories';
 import ProductsList from '../component/ProductsList';
+import ProductsListItem from "../component/ProductListItem";
 
 class ProductsView extends Component{
-  state = {
-    filterValue:'',
-    category: ''
-  };
+ state = {
+   inputValue: ''
+ };
 
   componentDidMount() {
     //fetch data using saga
     this.props.addElementToStore();
 
     //save data after refreshing
-    this.checkRefreshedData();
+    this.saveRefreshedData();
   }
 
   //save search value from input
   handleInputValue = e => {
-    this.setState({filterValue: e.target.value});
     this.props.addSearchValueToStore(e.target.value)
   };
 
   selectedCategory = category => {
-    this.setState({category});
     this.props.addCategoryToStore(category);
+    this.props.addSearchValueToStore('')
   };
 
 
-  checkRefreshedData = () => {
-    const { location: { pathname, search } } = this.props;
-    const {filterValue, category} = this.state;
+  saveRefreshedData = () => {
+    const { location: { pathname, search }, selectCategory, searchValue } = this.props;
 
-    if ((pathname || search) && !filterValue && !category) {
+    if ((pathname || search) && !searchValue && !selectCategory) {
       let word = search ? search.split('?search=')[1] : '';
       let category = pathname ? pathname.split('/')[1] : '';
-      this.setState({
-        filterValue: word,
-        category: category
-      })
+      this.props.addSearchValueToStore(word);
+      this.props.addCategoryToStore(category);
     }
-  }
+  };
 
+  createProductList = (list) => {
+    return list.map((item, index) => (
+      <ProductsListItem
+        title={item.name}
+        photo={item.img}
+        price={item.price}
+        key={index}/>
+    ))
+  };
 
   render() {
-    const { filterValue, category} = this.state;
-    const { handleInputValue, selectedCategory } = this;
+    const { products, categories, selectCategory, searchValue } =this.props;
+    const { createProductList, handleInputValue, selectedCategory } = this;
     return (
       <>
         <Row>
           <Col lg={{span: 7, offset: 4}}>
             <InputValue
               findProduct={handleInputValue}
-              value={filterValue}
-              category={category}
+              value={searchValue}
+              category={selectCategory}
             />
           </Col>
         </Row>
@@ -68,16 +73,15 @@ class ProductsView extends Component{
           <Col lg={{span: 3, offset: 1}}>
             <ListGroup as='ul'>
               <Link to='/'>
-                <ListGroupItem onClick={() => selectedCategory('')}>
+                <ListGroupItem onClick={() => selectedCategory('all Categories')}>
                   All Categories
                 </ListGroupItem>
               </Link>
-              {this.props.categories.map((item, index) => (
+              {categories.map((item, index) => (
                 <Categories
                   name={item}
                   key={index}
                   selectedCategory={selectedCategory}
-                  category={category}
                 />
               ))}
             </ListGroup>
@@ -86,15 +90,21 @@ class ProductsView extends Component{
             <Switch>
               <Route path='/:name' component={props =>
                 <ProductsList
-                  searchValue={filterValue}
-                  searchCategory={category}
-                  list={this.props.products} {...props} />
+                  // searchValue={searchValue}
+                  // searchCategory={selectCategory}
+                  // list={products}
+                  createList={createProductList}
+                  {...props}
+                />
               }/>
               <Route exact path='/' component={props =>
                 <ProductsList
-                  searchValue={filterValue}
-                  searchCategory={category}
-                  list = {this.props.products} {...props}/>
+                  // searchValue={searchValue}
+                  // searchCategory={selectCategory}
+                  // list = {products}
+                  createList={createProductList}
+                  {...props}
+                />
               }/>
             </Switch>
           </Col>
@@ -107,7 +117,7 @@ class ProductsView extends Component{
 const mapStateToProps = state => ({
   products: state.reducers.products,
   categories: state.reducers.categories,
-  selectedCategory: state.reducers.category,
+  selectCategory: state.reducers.category,
   searchValue: state.reducers.search
 });
 

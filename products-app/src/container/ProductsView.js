@@ -24,11 +24,16 @@ class ProductsView extends Component{
   }
 
   //save search value from input
-  handleInputValue = e => this.setState({filterValue: e.target.value});
+  handleInputValue = e => {
+    this.setState({filterValue: e.target.value});
+    this.props.addSearchValueToStore(e.target.value)
+  };
 
   selectedCategory = category => {
     this.setState({category});
+    this.props.addCategoryToStore(category);
   };
+
 
   checkRefreshedData = () => {
     const { location: { pathname, search } } = this.props;
@@ -101,13 +106,15 @@ class ProductsView extends Component{
 
 const mapStateToProps = state => ({
   products: state.reducers.products,
-  categories: state.reducers.categories
+  categories: state.reducers.categories,
+  selectedCategory: state.reducers.category,
+  searchValue: state.reducers.search
 });
 
 const mapDispatchToProps = dispatch => ({
   addElementToStore: () => dispatch(addToStore()),
-  addCategoryToStore: () => dispatch(addCategory()),
-  addSearchValueToStore: () => dispatch(addSearchValue())
+  addCategoryToStore: (e) => dispatch(addCategory(e)),
+  addSearchValueToStore: (e) => dispatch(addSearchValue(e))
 });
 
 export default withRouter(connect(

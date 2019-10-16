@@ -20,7 +20,7 @@ class ProductsView extends Component{
     this.saveRefreshedData();
   }
 
-  showCategoryList = (data) => {
+  showCategoryList = data => {
     return data.map((item, index) => (
       <Categories
         name={item}

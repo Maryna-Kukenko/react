@@ -83,7 +83,6 @@ class ProductsView extends Component{
   };
 
   render() {
-    console.log(this.props.searchValue);
     const { categories, selectCategory, searchValue } = this.props;
     const { showCategoryList, showProductList, handleInputValue, selectedCategory } = this;
     return (
@@ -111,16 +110,10 @@ class ProductsView extends Component{
           <Col lg={7}>
             <Switch>
               <Route path='/:name' component={props =>
-                <ProductsList
-                  createList={showProductList}
-                  {...props}
-                />
+                <ProductsList createList={showProductList}{...props}/>
               }/>
               <Route exact path='/' component={props =>
-                <ProductsList
-                  createList={showProductList}
-                  {...props}
-                />
+                <ProductsList createList={showProductList}{...props}/>
               }/>
             </Switch>
           </Col>
@@ -144,6 +137,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProductsView))
+    mapStateToProps,
+    mapDispatchToProps
+  )(ProductsView)
+);

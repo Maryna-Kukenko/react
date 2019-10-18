@@ -8,7 +8,7 @@ export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const GET_SELECT_CATEGORY = 'GET_SELECT_CATEGORY';
 export const GET_SEARCH_VALUE = 'GET_SEARCH_VALUE';
 
-const store = {
+export const store = {
   products: [],
   categories: [],
   category: '',
@@ -60,6 +60,7 @@ export function addToStore () {
   return({type: GET_DATA})
 }
 
+//actions
 export function addCategory(data) {
   return({type: GET_SELECT_CATEGORY, payload: data})
 }

@@ -86,7 +86,7 @@ class ProductsView extends Component{
     const { categories, selectCategory, searchValue } = this.props;
     const { showCategoryList, showProductList, handleInputValue, selectedCategory } = this;
     return (
-      <>
+      <div>
         <Row>
           <Col lg={{span: 7, offset: 4}}>
             <InputValue
@@ -118,7 +118,7 @@ class ProductsView extends Component{
             </Switch>
           </Col>
         </Row>
-      </>
+      </div>
     );
   }
 }

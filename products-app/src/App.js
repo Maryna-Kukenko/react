@@ -22,8 +22,8 @@ sagaMiddleware.run(getData);
 
 export function App() {
   return (
-    <Container>
-      <ProductsView />
-    </Container>
+      <Container>
+        <ProductsView />
+      </Container>
   );
 }

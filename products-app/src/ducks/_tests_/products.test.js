@@ -1,7 +1,7 @@
-import reducer, {addData, store} from "../products";
-import { addToStore, addCategory, addSearchValue } from "../products";
-import {call} from "@redux-saga/core/effects";
-import axios from "axios";
+import reducer, {addData, store} from '../products';
+import {  addCategory, addSearchValue } from '../products';
+import { call } from '@redux-saga/core/effects';
+import axios from 'axios';
 
 export const GET_DATA = 'GET_DATA';
 export const GET_PRODUCTS = 'GET_PRODUCTS';

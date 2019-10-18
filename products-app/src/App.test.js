@@ -6,7 +6,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { shallow } from 'enzyme';
+import  {shallow}  from 'enzyme';
 
 import reducers  from './ducks/products';
 import { App } from './App';
